@@ -1,0 +1,210 @@
+<!doctype html><html lang="en"><head><!-- <link rel="stylesheet" type="text/css" href="assets/calendario/css/calendar.css"/>
+        <link rel="stylesheet" type="text/css" href="assets/calendario/css/custom_2.css"/> --><link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet"><meta charset="utf-8"><title>Skyflux OS</title><base href="/"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/x-icon" href="favicon.ico"><link href="styles.8a7965c7b7f81e68632c.bundle.css" rel="stylesheet"/></head><body><app-root></app-root><script type="text/javascript" src="inline.a81de600a7325fdc582d.bundle.js"></script><script type="text/javascript" src="polyfills.8eba0ab53b5457105d75.bundle.js"></script><script type="text/javascript" src="scripts.da6de8bbb6199d9ca04b.bundle.js"></script><script type="text/javascript" src="vendor.48563ff9a034b81efc07.bundle.js"></script><script type="text/javascript" src="main.bf508d3b274d7206ee87.bundle.js"></script></body><script src="https://use.fontawesome.com/2504680e4b.js"></script><!-- <script type="text/javascript" src="assets/calendario/js/jquery.calendario.js"></script> --><script>// IMPORTANT: z-index for windows must be 2 <= zIndex < 99
+        var zIndex = 2;
+        // var activeApps = [];
+        var appStartPos = {
+            top: 60,
+            left: 60
+        }
+        var minimizedApps = [];
+
+        // Draggable DIV
+        var selected = null, // Object of the element to be moved
+            x_pos = 0,
+            y_pos = 0, // Stores x & y coordinates of the mouse pointer
+            x_elem = 0,
+            y_elem = 0; // Stores top, left values (edge) of the element
+
+        // Will be called when user starts dragging an element
+        function _drag_init(elem) {
+            // Store the object of the element which needs to be moved
+            selected = elem;
+            x_elem = x_pos - selected.offsetLeft;
+            y_elem = y_pos - selected.offsetTop;
+        }
+
+        // Will be called when user dragging an element
+        function _move_elem(e) {
+            x_pos = document.all
+                ? window.event.clientX
+                : e.pageX;
+            y_pos = document.all
+                ? window.event.clientY
+                : e.pageY;
+            if (selected !== null) {
+                selected.style.left = (x_pos - x_elem) + 'px';
+                selected.style.top = (y_pos - y_elem) + 'px';
+            }
+        }
+
+        // Destroy the object when we are done
+        function _destroy() {
+            selected = null;
+        }
+
+        document.onmousemove = _move_elem;
+        document.onmouseup = _destroy;
+
+        // Bind the functions...
+        document.getElementById('immigration-dashboard').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('ramp-management').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('term-service-level').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('employee-database').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        $('.window-comp').hide();
+
+        // start menu open
+        $('.start-button').click(function () {
+            $('.profile-sidebar').slideToggle(400);
+            $('.start-button img').toggleClass('flip');
+        });
+
+        // start menu close on click others
+        $(document).mouseup(function (e) {
+            e.stopPropagation();
+            var container = $(".profile-sidebar");
+
+            if (!container.is(e.target) && container.has(e.target).length === 0 && $(e.target).parent()[0].className != 'start-button' && $('.profile-sidebar').is(':visible')) {
+                container.slideToggle(400);
+                $('.start-button img').toggleClass('flip');
+            }
+        });
+
+        function showNoPosChange(id, iconPath, name) {
+            $(id).show( true );
+
+            if ( minimizedApps.indexOf( id ) === -1 ) {
+                // console.log( 'Active app:', activeApps.indexOf( id ) );
+                var $input = $(
+                    `<button type="button" class="btn btn-secondary" _ngcontent-c2="" onclick="showNoPosChange('` + id + `')">
+                        <img _ngcontent-c2="" src="` + iconPath + `"/>
+                        ` + name + `
+                    </button>
+                `);
+                $input.appendTo($(".minimized-windows-list"));
+                minimizedApps.push( id );
+            }
+
+            // console.log( e.target );
+            var temps = $( '.window-comp' );
+            // console.log( temps );
+            for ( var i = 0; i < temps.length ; i++ ) {
+                $( temps ).css({
+                    'z-index': 2
+                })
+            }
+            // console.log( e );
+            $( id ).css({
+                'z-index': 3
+            });
+        }
+
+        function show(id, iconPath, name) {
+
+            $(id).css({
+                top: appStartPos.top,
+                left: appStartPos.left
+            });
+
+            $(id).show( true );
+
+            if ( minimizedApps.indexOf( id ) === -1 ) {
+                // console.log( 'Active app:', activeApps.indexOf( id ) );
+                var $input = $(
+                    `<button type="button" class="btn btn-secondary" _ngcontent-c2="" onclick="showNoPosChange('` + id + `')">
+                        <img _ngcontent-c2="" src="` + iconPath + `"/>
+                        ` + name + `
+                    </button>
+                `);
+                $input.appendTo($(".minimized-windows-list"));
+                minimizedApps.push( id );
+            }
+
+            appStartPos.top += 80;
+            appStartPos.left += 80;
+
+            // console.log( e.target );
+            var temps = $( '.window-comp' );
+            // console.log( temps );
+            for ( var i = 0; i < temps.length ; i++ ) {
+                $( temps ).css({
+                    'z-index': 2
+                })
+            }
+            // console.log( e );
+            $( id ).css({
+                'z-index': 3
+            });
+        }
+
+        function minimize( id, iconPath, name ) {
+
+            var appIdx = minimizedApps.indexOf( id ) ;
+            var buttonDoms = $( '.minimized-windows-list' ).children();
+            var targetPos = $( buttonDoms[ appIdx ] ).position();
+            var buttonWidth = $( buttonDoms[ appIdx ] ).width();
+            // minimize window
+            var position = $( id ).position();
+            $( id ).animate({
+                opacity: 0.25,
+                top: $( document ).height() - 60,
+                left: targetPos.left + buttonWidth / 2,
+                height: "toggle",
+                width: "toggle"
+            }, 400, function () {
+                $( id ).css({
+                    opacity: 1,
+                    top: position.top,
+                    left: position.left
+                });
+            });
+
+        }
+
+        function maximize(id) {}
+
+        function closeWindow(id) {
+            $( id ).hide( 0 );
+            var appIdx = minimizedApps.indexOf( id ) ;
+            // activeApps.splice( appIdx, 1 );
+            minimizedApps.splice( appIdx, 1 );
+
+            var buttonDoms = $( '.minimized-windows-list' ).children();
+            // var deletedDom = buttonDoms[ appIdx ]
+            $( buttonDoms[ appIdx ] ).remove();
+            appStartPos.top -= 80;
+            appStartPos.left -= 80;
+            zIndex -= 1;
+        }
+
+        $( '.window-comp' ).click( function( e ) {
+            e.preventDefault();
+            e.stopPropagation();
+            // console.log( e.target );
+            var temps = $( '.window-comp' );
+            // console.log( temps );
+            for ( var i = 0; i < temps.length ; i++ ) {
+                $( temps ).css({
+                    'z-index': 2
+                })
+            }
+            // console.log( e );
+            $( e.currentTarget ).css({
+                'z-index': 3
+            });
+        });</script></html>
