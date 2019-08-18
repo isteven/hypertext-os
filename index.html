@@ -1,210 +1,299 @@
 <!doctype html>
 <html lang="en">
-    <head><!-- <link rel="stylesheet" type="text/css" href="assets/calendario/css/calendar.css"/>
+
+<head>
+    <!-- <link rel="stylesheet" type="text/css" href="assets/calendario/css/calendar.css"/>
         <link rel="stylesheet" type="text/css" href="assets/calendario/css/custom_2.css"/> -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet"><meta charset="utf-8">
-        <title>Skyflux OS</title>
-        <base href="/skyflux-os-ui/"><meta name="viewport" content="width=device-width,initial-scale=1">
-        <link rel="icon" type="image/x-icon" href="favicon.ico">
-        <link href="styles.8a7965c7b7f81e68632c.bundle.css" rel="stylesheet"/></head>
-    <body>
-        <app-root></app-root>
-        <script type="text/javascript" src="inline.a81de600a7325fdc582d.bundle.js"></script>
-        <script type="text/javascript" src="polyfills.8eba0ab53b5457105d75.bundle.js"></script>
-        <script type="text/javascript" src="scripts.da6de8bbb6199d9ca04b.bundle.js"></script>
-        <script type="text/javascript" src="vendor.48563ff9a034b81efc07.bundle.js"></script>
-        <script type="text/javascript" src="main.bf508d3b274d7206ee87.bundle.js"></script>
-    </body>
-    <script src="https://use.fontawesome.com/2504680e4b.js"></script>
-    <!-- <script type="text/javascript" src="assets/calendario/js/jquery.calendario.js"></script> -->
-    <script>
-        // IMPORTANT: z-index for windows must be 2 <= zIndex < 99
-        var zIndex = 2;
-        // var activeApps = [];
-        var appStartPos = {
-            top: 60,
-            left: 60
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="utf-8">
+    <title>Skyflux OS</title>
+    <base href="/">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+
+<body>
+    <app-root>
+
+    </app-root>
+<script type="text/javascript" src="inline.bundle.js"></script><script type="text/javascript" src="polyfills.bundle.js"></script><script type="text/javascript" src="scripts.bundle.js"></script><script type="text/javascript" src="styles.bundle.js"></script><script type="text/javascript" src="vendor.bundle.js"></script><script type="text/javascript" src="main.bundle.js"></script></body>
+
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script> -->
+
+<!-- <script type="text/javascript" src="assets/calendario/js/jquery.calendario.js"></script> -->
+<script>
+
+    // IMPORTANT: z-index for windows must be 2 <= zIndex < 99
+    var zIndex = 2;
+    // var activeApps = [];
+    var appStartPos = {
+        top: 60,
+        left: 60
+    }
+    var minimizedApps = [];
+    var maximizedApps = [];
+
+    // Draggable DIV
+    var selected = null, // Object of the element to be moved
+        x_pos = 0,
+        y_pos = 0, // Stores x & y coordinates of the mouse pointer
+        x_elem = 0,
+        y_elem = 0; // Stores top, left values (edge) of the element
+
+    // Will be called when user starts dragging an element
+    function _drag_init(elem) {
+        // Store the object of the element which needs to be moved
+        selected = elem;
+        x_elem = x_pos - selected.offsetLeft;
+        y_elem = y_pos - selected.offsetTop;
+    }
+
+    // Will be called when user dragging an element
+    function _move_elem(e) {
+        x_pos = document.all
+            ? window.event.clientX
+            : e.pageX;
+        y_pos = document.all
+            ? window.event.clientY
+            : e.pageY;
+        if (selected !== null) {
+            selected.style.left = (x_pos - x_elem) + 'px';
+            selected.style.top = (y_pos - y_elem) + 'px';
         }
-        var minimizedApps = [];
+    }
 
-        // Draggable DIV
-        var selected = null, // Object of the element to be moved
-            x_pos = 0,
-            y_pos = 0, // Stores x & y coordinates of the mouse pointer
-            x_elem = 0,
-            y_elem = 0; // Stores top, left values (edge) of the element
+    // Destroy the object when we are done
+    function _destroy() {
+        selected = null;
+    }
 
-        // Will be called when user starts dragging an element
-        function _drag_init(elem) {
-            // Store the object of the element which needs to be moved
-            selected = elem;
-            x_elem = x_pos - selected.offsetLeft;
-            y_elem = y_pos - selected.offsetTop;
-        }
+    document.onmousemove = _move_elem;
+    document.onmouseup = _destroy;
 
-        // Will be called when user dragging an element
-        function _move_elem(e) {
-            x_pos = document.all
-                ? window.event.clientX
-                : e.pageX;
-            y_pos = document.all
-                ? window.event.clientY
-                : e.pageY;
-            if (selected !== null) {
-                selected.style.left = (x_pos - x_elem) + 'px';
-                selected.style.top = (y_pos - y_elem) + 'px';
-            }
-        }
+    // Bind the functions...
+    document.getElementById('immigration-dashboard').onmousedown = function () {
+        _drag_init(this);
+        return false;
+    };
 
-        // Destroy the object when we are done
-        function _destroy() {
-            selected = null;
-        }
+    document.getElementById('ramp-management').onmousedown = function () {
+        _drag_init(this);
+        return false;
+    };
 
-        document.onmousemove = _move_elem;
-        document.onmouseup = _destroy;
+    document.getElementById('term-service-level').onmousedown = function () {
+        _drag_init(this);
+        return false;
+    };
 
-        // Bind the functions...
-        document.getElementById('immigration-dashboard').onmousedown = function () {
-            _drag_init(this);
-            return false;
-        };
+    document.getElementById('employee-database').onmousedown = function () {
+        _drag_init(this);
+        return false;
+    };
 
-        document.getElementById('ramp-management').onmousedown = function () {
-            _drag_init(this);
-            return false;
-        };
+    document.getElementById('insurance').onmousedown = function () {
+        _drag_init(this);
+        return false;
+    };
 
-        document.getElementById('term-service-level').onmousedown = function () {
-            _drag_init(this);
-            return false;
-        };
+    document.getElementById('tableau').onmousedown = function () {
+        _drag_init(this);
+        return false;
+    };
 
-        document.getElementById('employee-database').onmousedown = function () {
-            _drag_init(this);
-            return false;
-        };
+    document.getElementById('readme').onmousedown = function () {
+        _drag_init(this);
+        return false;
+    };
 
-        $('.window-comp').hide();
+    $('.window-comp').hide();
+    //setTimeout(function () {
 
-        // start menu open
-        $('.start-button').click(function () {
-            $('.profile-sidebar').slideToggle(400);
+    //}, 800);
+
+
+    // start menu open
+    $('.start-button').click(function () {
+        $('.profile-sidebar').slideToggle(400);
+        $('.start-button img').toggleClass('flip');
+    });
+
+    // start menu close on click others
+    $(document).mouseup(function (e) {
+        e.stopPropagation();
+        var container = $(".profile-sidebar");
+
+        if (!container.is(e.target) && container.has(e.target).length === 0 && $(e.target).parent()[0].className != 'start-button' && $('.profile-sidebar').is(':visible')) {
+            container.slideToggle(400);
             $('.start-button img').toggleClass('flip');
-        });
+        }
+    });
 
-        // start menu close on click others
-        $(document).mouseup(function (e) {
-            e.stopPropagation();
-            var container = $(".profile-sidebar");
+    function showNoPosChange(id, iconPath, name) {
+        $(id).show(true);
 
-            if (!container.is(e.target) && container.has(e.target).length === 0 && $(e.target).parent()[0].className != 'start-button' && $('.profile-sidebar').is(':visible')) {
-                container.slideToggle(400);
-                $('.start-button img').toggleClass('flip');
-            }
-        });
-
-        function showNoPosChange(id, iconPath, name) {
-            $(id).show(true);
-
-            if (minimizedApps.indexOf(id) === -1) {
-                // console.log( 'Active app:', activeApps.indexOf( id ) );
-                var $input = $(`<button type="button" class="btn btn-secondary" _ngcontent-c2="" onclick="showNoPosChange('` + id + `')">
+        if (minimizedApps.indexOf(id) === -1) {
+            // console.log( 'Active app:', activeApps.indexOf( id ) );
+            var $input = $(
+                `<button type="button" class="btn btn-secondary" _ngcontent-c2="" onclick="showNoPosChange('` + id + `')">
                         <img _ngcontent-c2="" src="` + iconPath + `"/>
                         ` + name + `
                     </button>
                 `);
-                $input.appendTo($(".minimized-windows-list"));
-                minimizedApps.push(id);
-            }
-
-            // console.log( e.target );
-            var temps = $('.window-comp');
-            // console.log( temps );
-            for (var i = 0; i < temps.length; i++) {
-                $(temps).css({'z-index': 2})
-            }
-            // console.log( e );
-            $(id).css({'z-index': 3});
+            $input.appendTo($(".minimized-windows-list"));
+            minimizedApps.push(id);
         }
 
-        function show(id, iconPath, name) {
+        // console.log( e.target );
+        var temps = $('.window-comp');
+        // console.log( temps );
+        for (var i = 0; i < temps.length; i++) {
+            $(temps).css({
+                'z-index': 2
+            })
+        }
+        // console.log( e );
+        $(id).css({
+            'z-index': 3
+        });
+    }
 
-            $(id).css({top: appStartPos.top, left: appStartPos.left});
+    function show(id, iconPath, name) {
 
-            $(id).show(true);
+        $(id).css({
+            top: appStartPos.top,
+            left: appStartPos.left
+        });
 
-            if (minimizedApps.indexOf(id) === -1) {
-                // console.log( 'Active app:', activeApps.indexOf( id ) );
-                var $input = $(`<button type="button" class="btn btn-secondary" _ngcontent-c2="" onclick="showNoPosChange('` + id + `')">
+        $(id).show(true);
+
+        if (minimizedApps.indexOf(id) === -1) {
+            // console.log( 'Active app:', activeApps.indexOf( id ) );
+            var $input = $(
+                `<button type="button" class="btn btn-secondary" _ngcontent-c2="" onclick="showNoPosChange('` + id + `')">
                         <img _ngcontent-c2="" src="` + iconPath + `"/>
                         ` + name + `
                     </button>
                 `);
-                $input.appendTo($(".minimized-windows-list"));
-                minimizedApps.push(id);
-            }
-
-            appStartPos.top += 80;
-            appStartPos.left += 80;
-
-            // console.log( e.target );
-            var temps = $('.window-comp');
-            // console.log( temps );
-            for (var i = 0; i < temps.length; i++) {
-                $(temps).css({'z-index': 2})
-            }
-            // console.log( e );
-            $(id).css({'z-index': 3});
+            $input.appendTo($(".minimized-windows-list"));
+            minimizedApps.push(id);
         }
 
-        function minimize(id, iconPath, name) {
+        appStartPos.top += 80;
+        appStartPos.left += 80;
 
-            var appIdx = minimizedApps.indexOf(id);
-            var buttonDoms = $('.minimized-windows-list').children();
-            var targetPos = $(buttonDoms[appIdx]).position();
-            var buttonWidth = $(buttonDoms[appIdx]).width();
-            // minimize window
-            var position = $(id).position();
-            $(id).animate({
-                opacity: 0.25,
-                top: $(document).height() - 60,
-                left: targetPos.left + buttonWidth / 2,
-                height: "toggle",
-                width: "toggle"
-            }, 400, function () {
-                $(id).css({opacity: 1, top: position.top, left: position.left});
+        // console.log( e.target );
+        var temps = $('.window-comp');
+        // console.log( temps );
+        for (var i = 0; i < temps.length; i++) {
+            $(temps).css({
+                'z-index': 2
+            })
+        }
+        // console.log( e );
+        $(id).css({
+            'z-index': 3
+        });
+    }
+
+    function minimize(id, iconPath, name) {
+
+        var appIdx = minimizedApps.indexOf(id);
+        var buttonDoms = $('.minimized-windows-list').children();
+        var targetPos = $(buttonDoms[appIdx]).position();
+        var buttonWidth = $(buttonDoms[appIdx]).width();
+        console.log(appIdx, buttonDoms);
+        // minimize window
+        var position = $(id).position();
+        $(id).animate({
+            opacity: 0.25,
+            top: $(document).height() - 60,
+            left: targetPos.left + buttonWidth / 2,
+            height: "toggle",
+            width: "toggle"
+        }, 400, function () {
+            $(id).css({
+                opacity: 1,
+                top: position.top,
+                left: position.left
             });
-
-        }
-
-        function maximize(id) {}
-
-        function closeWindow(id) {
-            $(id).hide(0);
-            var appIdx = minimizedApps.indexOf(id);
-            // activeApps.splice( appIdx, 1 );
-            minimizedApps.splice(appIdx, 1);
-
-            var buttonDoms = $('.minimized-windows-list').children();
-            // var deletedDom = buttonDoms[ appIdx ]
-            $(buttonDoms[appIdx]).remove();
-            appStartPos.top -= 80;
-            appStartPos.left -= 80;
-            zIndex -= 1;
-        }
-
-        $('.window-comp').click(function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            // console.log( e.target );
-            var temps = $('.window-comp');
-            // console.log( temps );
-            for (var i = 0; i < temps.length; i++) {
-                $(temps).css({'z-index': 2})
-            }
-            // console.log( e );
-            $(e.currentTarget).css({'z-index': 3});
         });
-    </script>
+
+    }
+
+    function maximize(id) {
+
+        var appIdx = maximizedApps.indexOf(id);
+        var buttonDoms = $('.maximized-windows-list').children();
+        // var targetPos = $(buttonDoms[appIdx]).position();
+        // var buttonWidth = $(buttonDoms[appIdx]).width();
+        // minimize window
+        console.log(appIdx, buttonDoms);
+        var position = $(id).position();
+        $(id).animate({
+            // opacity: 0.25
+            //top: $(document).height() - 60,
+            //left: targetPos.left + buttonWidth / 2
+        }, 400, function () {
+            $(id).css({
+                opacity: 1,
+                top: 0,
+                left: 0,
+                height: $(document).height() - 58,
+                width: $(document).width()
+            });
+        });
+    }
+
+    function closeWindow(id) {
+        $(id).hide(0);
+        var appIdx = minimizedApps.indexOf(id);
+        // activeApps.splice( appIdx, 1 );
+        minimizedApps.splice(appIdx, 1);
+
+        var buttonDoms = $('.minimized-windows-list').children();
+        // var deletedDom = buttonDoms[ appIdx ]
+        $(buttonDoms[appIdx]).remove();
+        appStartPos.top -= 80;
+        appStartPos.left -= 80;
+        zIndex -= 1;
+    }
+
+    $('.window-comp').click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        // console.log( e.target );
+        var temps = $('.window-comp');
+        // console.log( temps );
+        for (var i = 0; i < temps.length; i++) {
+            $(temps).css({
+                'z-index': 2
+            })
+        }
+        // console.log( e );
+        $(e.currentTarget).css({
+            'z-index': 3
+        });
+    });
+
+    function loadImage(selector, fileName) {
+        $(selector).attr("src", fileName);
+    }
+
+    function unloadIframeSource(selector) {
+        console.log('UNLOAD IFRAME')
+        $(selector).attr("src", "about:blank");
+    }
+
+    function loadIframeSource(selector, source) {
+        $(selector).attr("src", source);
+    }
+</script>
+
+<!-- <script src="c3js/c3.min.js"></script> -->
+
 </html>
