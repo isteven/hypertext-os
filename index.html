@@ -26,6 +26,88 @@
 
 <!-- <script type="text/javascript" src="assets/calendario/js/jquery.calendario.js"></script> -->
 <script>
+    $(document).ready(function () {
+
+        // Bind the functions...
+        document.getElementById('immigration-dashboard').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('ramp-management').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('term-service-level').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('employee-database').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('insurance').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('tableau').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        document.getElementById('readme').onmousedown = function () {
+            _drag_init(this);
+            return false;
+        };
+
+        $('.window-comp').hide();
+        //setTimeout(function () {
+
+        //}, 800);
+
+
+
+
+
+    });
+
+    // start menu close on click others
+    $(document).mouseup(function (e) {
+        e.stopPropagation();
+        var container = $(".profile-sidebar");
+
+        if (!container.is(e.target) && container.has(e.target).length === 0 && $(e.target).parent()[0].className != 'start-button' && $('.profile-sidebar').is(':visible')) {
+            container.slideToggle(400);
+            $('.start-button img').toggleClass('flip');
+        }
+    });
+
+    // start menu open
+    $('.start-button').click(function () {
+        $('.profile-sidebar').slideToggle(400);
+        $('.start-button img').toggleClass('flip');
+    });
+
+    $('.window-comp').click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        // console.log( e.target );
+        var temps = $('.window-comp');
+        // console.log( temps );
+        for (var i = 0; i < temps.length; i++) {
+            $(temps).css({
+                'z-index': 2
+            })
+        }
+        // console.log( e );
+        $(e.currentTarget).css({
+            'z-index': 3
+        });
+    });
 
     // IMPORTANT: z-index for windows must be 2 <= zIndex < 99
     var zIndex = 2;
@@ -74,65 +156,19 @@
     document.onmousemove = _move_elem;
     document.onmouseup = _destroy;
 
-    // Bind the functions...
-    document.getElementById('immigration-dashboard').onmousedown = function () {
-        _drag_init(this);
-        return false;
-    };
 
-    document.getElementById('ramp-management').onmousedown = function () {
-        _drag_init(this);
-        return false;
-    };
+    function loadImage(selector, fileName) {
+        $(selector).attr("src", fileName);
+    }
 
-    document.getElementById('term-service-level').onmousedown = function () {
-        _drag_init(this);
-        return false;
-    };
+    function unloadIframeSource(selector) {
+        console.log('UNLOAD IFRAME')
+        $(selector).attr("src", "about:blank");
+    }
 
-    document.getElementById('employee-database').onmousedown = function () {
-        _drag_init(this);
-        return false;
-    };
-
-    document.getElementById('insurance').onmousedown = function () {
-        _drag_init(this);
-        return false;
-    };
-
-    document.getElementById('tableau').onmousedown = function () {
-        _drag_init(this);
-        return false;
-    };
-
-    document.getElementById('readme').onmousedown = function () {
-        _drag_init(this);
-        return false;
-    };
-
-    $('.window-comp').hide();
-    //setTimeout(function () {
-
-    //}, 800);
-
-
-    // start menu open
-    $('.start-button').click(function () {
-        $('.profile-sidebar').slideToggle(400);
-        $('.start-button img').toggleClass('flip');
-    });
-
-    // start menu close on click others
-    $(document).mouseup(function (e) {
-        e.stopPropagation();
-        var container = $(".profile-sidebar");
-
-        if (!container.is(e.target) && container.has(e.target).length === 0 && $(e.target).parent()[0].className != 'start-button' && $('.profile-sidebar').is(':visible')) {
-            container.slideToggle(400);
-            $('.start-button img').toggleClass('flip');
-        }
-    });
-
+    function loadIframeSource(selector, source) {
+        $(selector).attr("src", source);
+    }
     function showNoPosChange(id, iconPath, name) {
         $(id).show(true);
 
@@ -263,35 +299,6 @@
         zIndex -= 1;
     }
 
-    $('.window-comp').click(function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        // console.log( e.target );
-        var temps = $('.window-comp');
-        // console.log( temps );
-        for (var i = 0; i < temps.length; i++) {
-            $(temps).css({
-                'z-index': 2
-            })
-        }
-        // console.log( e );
-        $(e.currentTarget).css({
-            'z-index': 3
-        });
-    });
-
-    function loadImage(selector, fileName) {
-        $(selector).attr("src", fileName);
-    }
-
-    function unloadIframeSource(selector) {
-        console.log('UNLOAD IFRAME')
-        $(selector).attr("src", "about:blank");
-    }
-
-    function loadIframeSource(selector, source) {
-        $(selector).attr("src", source);
-    }
 </script>
 
 <!-- <script src="c3js/c3.min.js"></script> -->
